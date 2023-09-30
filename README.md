@@ -13,11 +13,3 @@ Welcome to the Calculator App with Theme Changing Button repository! This is a a
 - Theme-changing button for customization.
 - Open to further improvements and features.
 
-## Getting Started
-
-To get started with the Calculator App, follow these steps:
-
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/your-username/calculator-app.git
