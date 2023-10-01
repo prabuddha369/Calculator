@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button one, two, three, four, five, six, seven, eight, nine, zero, point, add, div, sub, mul, C, percent, equal;
     View erase;
     TextView answer;
-    Boolean flg = false;//This Flag helps if the user has done his previous calculation and is wanting to start a new calculation
+    Boolean flg = false,flag=true;//flg helps if the user has done his previous calculation and is wanting to start a new calculation and flag helps to detect 2.2.3.4 type of input
     Toast t1,t2;
     ToggleButton toggleButton;
 
@@ -238,8 +238,15 @@ public class MainActivity extends AppCompatActivity {
             answer.setText("");
             flg = false;
         }
-
         String currentText = answer.getText().toString();
+        if(!currentText.isEmpty())
+        {
+            if(currentText.charAt(currentText.length() - 1)=='%')
+            {
+                answer.setText(currentText +"×"+number);
+                return;
+            }
+        }
         if (currentText.length() >= 12) {
             answer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
         } else {
@@ -260,14 +267,29 @@ public class MainActivity extends AppCompatActivity {
             flg = false;
         }
         String currentText = answer.getText().toString();
-        if (currentText.contains(".")) {//To check for multiple dots
+        if (flag){
+            answer.setText(currentText + ".");
+            flag=false;
+        }
+        else {
             t1.cancel();
             t2.cancel();
             t1.show();
-        } else if (currentText.isEmpty()) {
+            return;
+        }
+
+        if (currentText.isEmpty()) {
             answer.setText("0.");//Just to look good
-        } else {
-            answer.setText(currentText + ".");
+        } else if (isOperator(currentText.charAt(currentText.length() - 1))) {
+            if(currentText.charAt(currentText.length() - 1)=='.')
+            {
+                t1.cancel();
+                t2.cancel();
+                t1.show();
+            }
+            else{
+                answer.setText(currentText + "0.");
+            }
         }
     }
 
@@ -280,11 +302,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             answer.setText(currentText +"%");
         }
+        flag=true;
     }
 
     private void handleOperatorClick(String operator) {
         String currentText = answer.getText().toString();
-
+        flag=true;
         if (currentText.isEmpty() || isOperator(currentText.charAt(currentText.length() - 1))) {
             t1.cancel();
             t2.cancel();
@@ -300,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Calculating the result when the equal is clicked
     private void handleEqualClick() {
-
         if (answer.getText().toString().isEmpty()) {//To check if the text is empty since it cause exception
             return;
         } else {//Calculating result
@@ -336,16 +358,22 @@ public class MainActivity extends AppCompatActivity {
                 answer.setText("Error");//Divide by zero
             }
         }
+        flag=true;
     }
 
     private void handleClearClick() {
         answer.setText("");
+        flag=true;
     }//Clear the TextView
 
     private void handleEraseClick() {//Erasing the last value
         String currentText = answer.getText().toString();
         if (!currentText.isEmpty()) {
             String newText = currentText.substring(0, currentText.length() - 1);
+            if(currentText.charAt(currentText.length() - 1)=='.')
+            {
+                flag=true;
+            }
             answer.setText(newText);
         }
     }
