@@ -323,9 +323,17 @@ public class MainActivity extends AppCompatActivity {
 
     //Calculating the result when the equal is clicked
     private void handleEqualClick() {
+        String temp=answer.getText().toString();
         if (answer.getText().toString().isEmpty()) {//To check if the text is empty since it cause exception
             return;
-        } else {//Calculating result
+        }
+        else if(isOperator(temp.charAt(temp.length()-1))){
+            t1.cancel();
+            t2.cancel();
+            t1.show();
+            return;
+        }
+        else {//Calculating result
             String expression = answer.getText().toString();//Getting the equation eg: 5+4-6÷5×8.8%
             expression = expression.replace("÷", "/");//changing the operator to avoid exception
             expression = expression.replace("×", "*");//changing the operator to avoid exception
